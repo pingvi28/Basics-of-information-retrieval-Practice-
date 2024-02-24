@@ -18,6 +18,8 @@ is_downloaded = True
 tokens_file = "tokens.txt"
 lemmas_tokens_file = "lemmas.txt"
 
+inverted_index_file = "inverted_indexes.txt"
+
 ## task 1
 # пропускаем этот этап
 if not is_downloaded:
@@ -41,6 +43,7 @@ if not is_downloaded:
                 print("Can't download: error on page", (post_id - current_i * N_step))
                 count += 1
     index_file.close()
+
 
 REMOVE_MORPH = ['ADJ', 'NOUN', 'PROPN', 'VERB']
 morph = MorphVocab()
@@ -84,16 +87,25 @@ for i in range(0, 100):
             all_lemmas[lemma].add(token.text.lower())
             all_lemmas_indexes[lemma].add(i)
 
-
 lem_f = open(lemmas_tokens_file, 'w', encoding="utf-8")
-tot_f = open(tokens_file, 'w', encoding="utf-8")
+tok_f = open(tokens_file, 'w', encoding="utf-8")
+inv_f = open(inverted_index_file, 'w', encoding="utf-8")
 
 for key in all_lemmas.keys():
     lem_f.write(key + ":")
     for s_el in all_lemmas[key]:
         lem_f.write(" " + s_el)
-        tot_f.write(s_el + "\n")
+        tok_f.write(s_el + "\n")
     lem_f.write("\n")
 
+    inv_f.write(key)
+    for i_el in all_lemmas_indexes[key]:
+        inv_f.write(" " + str(i_el))
+    inv_f.write("\n")
+
 lem_f.close()
-tot_f.close()
+tok_f.close()
+inv_f.close()
+
+
+
